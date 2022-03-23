@@ -3,6 +3,7 @@ import type {
   TranslationChange,
   TranslationChangeProps,
   TranslationFunction,
+  TranslationFunctionProps,
   TranslationProps,
   TranslationValues
 } from './types.js';
@@ -126,7 +127,7 @@ export const useTranslationChange = () => {
   return React.useContext(TranslationChangeContext);
 };
 
-export const withTranslation = <P>(Component: ComponentType<P & TranslationProps>) => {
+export const withTranslation = <P>(Component: ComponentType<P & TranslationFunctionProps>) => {
   const WithTranslation: FC<P> = (props) => {
     const t = useTranslation();
 
@@ -144,4 +145,26 @@ export const withTranslationChange = <P>(Component: ComponentType<P & Translatio
   };
 
   return WithTranslationChange;
+};
+
+const TranslationRender: FC<TranslationProps> = ({ path, values }) => {
+  const t = useTranslation();
+
+  return t(path, values) as any;
+};
+
+export const Translation: FC<TranslationProps> = ({
+  children = null,
+  path,
+  values
+}) => {
+  return React.createElement(
+    React.Suspense,
+    // eslint-disable-next-line react/destructuring-assignment
+    { fallback: children },
+    React.createElement(
+      TranslationRender,
+      { path, values }
+    )
+  );
 };

@@ -3,7 +3,7 @@ export type TranslationValues = {
 };
 
 export type TranslationFunction = (path: string, values?: TranslationValues) => string;
-export type TranslationProps = {
+export type TranslationFunctionProps = {
   t: TranslationFunction;
 };
 
@@ -16,3 +16,7 @@ export type TranslationChangeProps = {
   translation: TranslationChange;
 };
 
+export type TranslationProps = {
+  path: string;
+  values?: TranslationValues;
+};

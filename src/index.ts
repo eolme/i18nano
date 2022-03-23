@@ -1,4 +1,5 @@
 export {
+  Translation,
   TranslationProvider,
 
   useTranslation,
@@ -13,5 +14,6 @@ export type {
   TranslationChange,
   TranslationChangeProps,
   TranslationFunction,
+  TranslationFunctionProps,
   TranslationProps
 } from './types.js';
