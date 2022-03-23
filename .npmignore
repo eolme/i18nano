@@ -1,0 +1,10 @@
+.DS_Store
+tsconfig.json
+.editorconfig
+.eslintcache
+.eslintignore
+.eslintrc
+yarn.lock
+node_modules/
+src/
+example/
