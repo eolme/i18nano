@@ -1,6 +1,6 @@
 {
   "name": "i18nano",
-  "version": "0.0.0-alpha.3",
+  "version": "0.0.1",
   "type": "module",
   "main": "./lib/index.js",
   "exports": "./lib/index.js",

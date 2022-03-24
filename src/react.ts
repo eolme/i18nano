@@ -14,8 +14,10 @@ import { suspend, preload as suspendPreload } from 'suspend-react';
 
 import { default as get } from 'get-value';
 
+const invoke = (scope: () => void) => scope();
+
 const {
-  unstable_startTransition = (scope: () => void) => scope(),
+  unstable_startTransition = invoke,
   startTransition = unstable_startTransition
 } = React as any;
 
@@ -50,14 +52,27 @@ const TranslationChangeContext = React.createContext<TranslationChange>({
 
 type TranslationProviderProps = {
   language?: string;
+  preloadLanguage?: boolean;
+
   fallback?: string;
+  preloadFallback?: boolean;
+
   translations?: Record<string, () => Promise<TranslationValues>>;
+
+  unstable_transition?: boolean;
 };
 
 export const TranslationProvider: FC<TranslationProviderProps> = ({
   language = 'en',
+  preloadLanguage = true,
+
   fallback = language,
+  preloadFallback = false,
+
   translations = {},
+
+  unstable_transition = false,
+
   children
 }) => {
   const [lang, setLanguage] = React.useState(language);
@@ -66,16 +81,17 @@ export const TranslationProvider: FC<TranslationProviderProps> = ({
     suspendPreload(translations[next], [next]);
   };
 
-  if (language !== lang) {
+  if (preloadLanguage && language !== lang) {
     preload(lang);
   }
 
-  if (language !== fallback) {
+  if (preloadFallback && language !== fallback) {
     preload(fallback);
   }
 
+  const transition = unstable_transition ? startTransition : invoke;
   const change = (next: string) => {
-    startTransition(() => {
+    transition(() => {
       setLanguage(next);
     });
   };
@@ -95,6 +111,7 @@ export const TranslationProvider: FC<TranslationProviderProps> = ({
   }, [lang]);
 
   const translation = React.useMemo(() => ({
+    all: Object.keys(translations),
     lang,
     change,
     preload
