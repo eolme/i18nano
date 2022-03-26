@@ -8,6 +8,7 @@ export type TranslationFunctionProps = {
 };
 
 export type TranslationChange = Readonly<{
+  all: string[];
   lang: string;
   change: (next: string) => void;
   preload: (next: string) => void;
@@ -19,4 +20,16 @@ export type TranslationChangeProps = {
 export type TranslationProps = {
   path: string;
   values?: TranslationValues;
+};
+
+export type TranslationProviderProps = {
+  language?: string;
+  preloadLanguage?: boolean;
+
+  fallback?: string;
+  preloadFallback?: boolean;
+
+  translations?: Record<string, () => Promise<TranslationValues>>;
+
+  unstable_transition?: boolean;
 };

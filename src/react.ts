@@ -5,6 +5,7 @@ import type {
   TranslationFunction,
   TranslationFunctionProps,
   TranslationProps,
+  TranslationProviderProps,
   TranslationValues
 } from './types.js';
 
@@ -14,53 +15,59 @@ import { suspend, preload as suspendPreload } from 'suspend-react';
 
 import { default as get } from 'get-value';
 
-const invoke = (scope: () => void) => scope();
+const noop = () => {
+  // Noop
+};
 
+const invoke = (scope: () => void) => {
+  scope();
+};
+
+/**
+ * React 18+ concurrent feature
+ */
 const {
   unstable_startTransition = invoke,
   startTransition = unstable_startTransition
-} = React as any;
+} = React as unknown as {
+  unstable_startTransition: typeof invoke;
+  startTransition: typeof invoke;
+};
 
 const EMPTY = '';
 
 const GET_OPTIONS = {
   default: EMPTY
+} as const;
+
+/**
+ * @param path - property path like 'a.b.c'
+ * @param values - object
+ * @returns string of values if found otherwise empty string
+ *
+ * @see https://npm.im/get-value
+ */
+const lookupValue = (path: string, values: TranslationValues): string => {
+  return get(values, path, GET_OPTIONS);
 };
 
-const getTranslation = (path: string, values: TranslationValues): string => get(values, path, GET_OPTIONS);
-
 const lookup = (path: string, values: TranslationValues, lang: TranslationValues) => {
-  let resolved = getTranslation(path, lang);
+  let resolved = lookupValue(path, lang);
 
   for (const key in values) {
-    resolved = resolved.replace(`{{${key}}}`, getTranslation(key, values));
+    resolved = resolved.replace(`{{${key}}}`, lookupValue(key, values));
   }
 
   return resolved;
 };
 
-const noop = () => {
-  // Noop
-};
-
 const TranslationContext = React.createContext<TranslationFunction>(() => EMPTY);
 const TranslationChangeContext = React.createContext<TranslationChange>({
+  all: [],
   lang: '',
-  preload: noop,
-  change: noop
+  change: noop,
+  preload: noop
 });
-
-type TranslationProviderProps = {
-  language?: string;
-  preloadLanguage?: boolean;
-
-  fallback?: string;
-  preloadFallback?: boolean;
-
-  translations?: Record<string, () => Promise<TranslationValues>>;
-
-  unstable_transition?: boolean;
-};
 
 export const TranslationProvider: FC<TranslationProviderProps> = ({
   language = 'en',
@@ -75,7 +82,13 @@ export const TranslationProvider: FC<TranslationProviderProps> = ({
 
   children
 }) => {
+  /**
+   * Two states are needed depending on usage:
+   * - `lang` for transition feature
+   * - `current` for immediate update
+   */
   const [lang, setLanguage] = React.useState(language);
+  const [current, setCurrent] = React.useState(language);
 
   const preload = (next: string) => {
     suspendPreload(translations[next], [next]);
@@ -91,6 +104,8 @@ export const TranslationProvider: FC<TranslationProviderProps> = ({
 
   const transition = unstable_transition ? startTransition : invoke;
   const change = (next: string) => {
+    setCurrent(next);
+
     transition(() => {
       setLanguage(next);
     });
@@ -112,10 +127,10 @@ export const TranslationProvider: FC<TranslationProviderProps> = ({
 
   const translation = React.useMemo(() => ({
     all: Object.keys(translations),
-    lang,
+    lang: current,
     change,
     preload
-  }), [lang]);
+  }), [current]);
 
   const TranslationContextProps = {
     value: t
@@ -136,6 +151,11 @@ export const TranslationProvider: FC<TranslationProviderProps> = ({
   );
 };
 
+/**
+ * Note: you need to wrap your component in Suspense
+ *
+ * @see https://reactjs.org/docs/concurrent-mode-suspense.html
+ */
 export const useTranslation = () => {
   return React.useContext(TranslationContext);
 };
@@ -144,6 +164,11 @@ export const useTranslationChange = () => {
   return React.useContext(TranslationChangeContext);
 };
 
+/**
+ * Note: you need to wrap your component in Suspense
+ *
+ * @see https://reactjs.org/docs/concurrent-mode-suspense.html
+ */
 export const withTranslation = <P>(Component: ComponentType<P & TranslationFunctionProps>) => {
   const WithTranslation: FC<P> = (props) => {
     const t = useTranslation();
@@ -164,12 +189,30 @@ export const withTranslationChange = <P>(Component: ComponentType<P & Translatio
   return WithTranslationChange;
 };
 
-const TranslationRender: FC<TranslationProps> = ({ path, values }) => {
+/**
+ * Use only if you want to wrap your own Suspense
+ *
+ * @param props.path - translation property path like `header.title.text`
+ * @param props.values - for mustache templates
+ *
+ * @see {@link Translation}
+ */
+// @ts-expect-error DefinitelyTyped issue
+export const TranslationRender: FC<TranslationProps> = ({ path, values }) => {
   const t = useTranslation();
 
-  return t(path, values) as any;
+  return t(path, values);
 };
 
+/**
+ * Recommended way to use i18nano
+ *
+ * @param props.children - fallback ReactElement, for example loader or skeleton
+ * @param props.path - translation property path like `header.title.text`
+ * @param props.values - for mustache templates
+ *
+ * @see {@link TranslationRender}
+ */
 export const Translation: FC<TranslationProps> = ({
   children = null,
   path,

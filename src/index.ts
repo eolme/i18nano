@@ -1,5 +1,6 @@
 export {
   Translation,
+  TranslationRender,
   TranslationProvider,
 
   useTranslation,

@@ -1,18 +1,32 @@
 {
   "name": "i18nano",
-  "version": "0.0.1",
-  "type": "module",
-  "main": "./lib/index.js",
-  "exports": "./lib/index.js",
+  "version": "1.0.0",
+  "source": "./src/index.ts",
+  "main": "./lib/index.cjs",
+  "module": "./lib/index.js",
   "types": "./lib/index.d.ts",
+  "exports": {
+    "require": "./lib/index.cjs",
+    "import": "./lib/index.js",
+    "types": "./lib/index.d.ts"
+  },
   "author": {
     "name": "Anton Petrov",
     "email": "im@petrov.engineer",
     "url": "https://petrov.engineer"
   },
-  "description": "",
+  "description": "Lightweight translation module with functionality similar to react-i18next",
   "license": "MIT",
-  "keywords": [],
+  "keywords": [
+    "i18n",
+    "i18next",
+    "internationalization",
+    "l10n",
+    "localization",
+    "translation",
+    "react",
+    "reactjs"
+  ],
   "homepage": "https://github.com/eolme/i18nano",
   "bugs": "https://github.com/eolme/i18nano/issues",
   "repository": {
@@ -21,24 +35,23 @@
   },
   "sideEffects": false,
   "scripts": {
-    "prebuild": "shx rm -rf lib",
-    "build": "tsc"
+    "build": "nanobundle build"
   },
   "devDependencies": {
     "@mntm/eslint-config": "^1.1.1",
     "@types/get-value": "^3.0.2",
-    "@types/node": "^17.0.21",
-    "@types/react": "^17.0.40",
-    "eslint": "^8.11.0",
-    "shx": "^0.3.4",
-    "typescript": "^4.6.2"
+    "@types/node": "^17.0.23",
+    "@types/react": "^17.0.43",
+    "eslint": "^8.12.0",
+    "nanobundle": "^0.0.27",
+    "typescript": "^4.6.3"
   },
   "dependencies": {
     "get-value": "^3.0.1",
     "suspend-react": "^0.0.8"
   },
   "peerDependencies": {
-    "react": "^17.0.2"
+    "react": ">=17.0.0"
   },
   "peerDependenciesMeta": {
     "react": {

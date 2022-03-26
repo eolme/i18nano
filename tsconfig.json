@@ -17,11 +17,11 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "jsx": "react-jsx",
     "baseUrl": ".",
     "skipLibCheck": true,
     "isolatedModules": true,
     "declaration": true,
+    "emitDeclarationOnly": true,
     "outDir": "lib"
   },
   "include": [
