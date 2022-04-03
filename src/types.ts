@@ -1,6 +1,6 @@
 export type TranslationValues = {
-  [key: string]: string | TranslationValues;
-};
+  [key: string | number]: string | TranslationValues;
+} | Array<string | TranslationValues>;
 
 export type TranslationFunction = (path: string, values?: TranslationValues) => string;
 export type TranslationFunctionProps = {
