@@ -3,6 +3,10 @@ const config = {
   moduleFileExtensions: ['js', 'ts'],
   extensionsToTreatAsEsm: ['.ts'],
   transform: {
+    '.js': ['jest-esbuild', {
+      format: 'esm',
+      loader: 'js'
+    }],
     '.ts': ['jest-esbuild', {
       format: 'esm',
       loader: 'ts'
