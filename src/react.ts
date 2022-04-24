@@ -40,6 +40,9 @@ const GET_OPTIONS = {
   default: EMPTY
 } as const;
 
+const PREFIX = '$$';
+const keyed = (key: string) => [PREFIX + key];
+
 /**
  * @param path - property path like 'a.b.c'
  * @param values - object
@@ -91,7 +94,7 @@ export const TranslationProvider: FC<TranslationProviderProps> = ({
   const [current, setCurrent] = React.useState(language);
 
   const preload = (next: string) => {
-    suspendPreload(translations[next], [next]);
+    suspendPreload(translations[next], keyed(next));
   };
 
   if (preloadLanguage && language !== lang) {
@@ -115,11 +118,11 @@ export const TranslationProvider: FC<TranslationProviderProps> = ({
     let result = EMPTY;
 
     if (lang in translations) {
-      result = lookup(path, values, suspend(translations[lang], [lang]));
+      result = lookup(path, values, suspend(translations[lang], keyed(lang)));
     }
 
     if (result === EMPTY && lang !== fallback && fallback in translations) {
-      result = lookup(path, values, suspend(translations[fallback], [fallback]));
+      result = lookup(path, values, suspend(translations[fallback], keyed(fallback)));
     }
 
     return result;
