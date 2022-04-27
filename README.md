@@ -41,7 +41,7 @@ export const App = () => {
 };
 ```
 
-And that's all it takes! For other available provider options see [definition](./src/react.ts#L75-L87).
+And that's all it takes! For other available provider options see [definition](./src/types.ts#L25-L35).
 
 ### Components
 
