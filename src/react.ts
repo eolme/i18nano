@@ -15,6 +15,12 @@ import { suspend, preload as suspendPreload } from 'suspend-react';
 
 import { default as get } from 'get-value';
 
+const EMPTY = '';
+
+const GET_OPTIONS = {
+  default: EMPTY
+} as const;
+
 const noop = () => {
   // Noop
 };
@@ -23,25 +29,25 @@ const invoke = (scope: () => void) => {
   scope();
 };
 
+let id = 0;
+const useInstanceId = () => React.useMemo(() => `${id++}`, []);
+
 /**
  * React 18+ concurrent feature
  */
 const {
   unstable_startTransition = invoke,
-  startTransition = unstable_startTransition
+  startTransition = unstable_startTransition,
+
+  unstable_useOpaqueIdentifier = useInstanceId,
+  useId = unstable_useOpaqueIdentifier
 } = React as unknown as {
   unstable_startTransition: typeof invoke;
   startTransition: typeof invoke;
+
+  unstable_useOpaqueIdentifier: typeof useInstanceId;
+  useId: typeof useInstanceId;
 };
-
-const EMPTY = '';
-
-const GET_OPTIONS = {
-  default: EMPTY
-} as const;
-
-const PREFIX = '$$';
-const keyed = (key: string) => [PREFIX + key];
 
 /**
  * @param path - property path like 'a.b.c'
@@ -92,6 +98,9 @@ export const TranslationProvider: FC<TranslationProviderProps> = ({
    */
   const [lang, setLanguage] = React.useState(language);
   const [current, setCurrent] = React.useState(language);
+
+  const instance = useId();
+  const keyed = (key: string) => [instance + key];
 
   const preload = (next: string) => {
     suspendPreload(translations[next], keyed(next));

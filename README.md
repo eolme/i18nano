@@ -1,4 +1,4 @@
-# i18nano [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/eolme/next-sw/blob/master/LICENSE) [![BundlePhobia](https://img.shields.io/bundlephobia/min/i18nano)](https://bundlephobia.com/package/i18nano)
+# i18nano [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/eolme/next-sw/blob/master/LICENSE) [![BundlePhobia](https://img.shields.io/bundlephobia/minzip/i18nano)](https://bundlephobia.com/package/i18nano) [![BundlePhobia](https://img.shields.io/bundlephobia/min/i18nano)](https://bundlephobia.com/package/i18nano)
 
 > Internationalization for the react is done simply.
 
@@ -86,6 +86,43 @@ export const LanguageChange = () => {
 
 If you use react 18 it is recommended to use `unstable_transition`.
 Then when you switch languages, the last downloaded translation will be displayed instead of the loader.
+
+## Split
+
+You can use several TranslationProviders to split up translation files, for example:
+
+```tsx
+import { TranslationProvider, Translation } from 'i18nano';
+
+const translations = {
+  header: {
+    'en': () => import('translations/header/en.json')
+  },
+  main: {
+    'en': () => import('translations/main/en.json')
+  }
+};
+
+export const Header = () => {
+  return (
+    <TranslationProvider translations={translations.header}>
+      <header>
+        <Translation path="title" />
+      </header>
+    </TranslationProvider>
+  );
+};
+
+export const Main = () => {
+  return (
+    <TranslationProvider translations={translations.main}>
+      <h1>
+        <Translation path="title" />
+      </h1>
+    </TranslationProvider>
+  );
+};
+```
 
 ## Installation
 
