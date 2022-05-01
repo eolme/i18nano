@@ -15,7 +15,7 @@ const config = {
   resolver: 'jest-ts-webcompat-resolver',
   testEnvironment: 'node',
   testMatch: [
-    '**/tests/*.ts'
+    '**/tests/*.spec.ts'
   ],
   collectCoverage: true,
   collectCoverageFrom: [

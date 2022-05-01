@@ -1,4 +1,4 @@
-import type { ComponentType, FC } from 'react';
+import type { ComponentType, FC, FCC } from './compat.js';
 import type {
   TranslationChange,
   TranslationChangeProps,
@@ -60,11 +60,11 @@ const lookupValue = (path: string, values: TranslationValues): string => {
   return get(values, path, GET_OPTIONS);
 };
 
-const lookup = (path: string, values: TranslationValues, lang: TranslationValues) => {
+const lookup = (path: string, values: TranslationValues | null, lang: TranslationValues) => {
   let resolved = lookupValue(path, lang);
 
-  for (const key in values) {
-    resolved = resolved.replace(`{{${key}}}`, lookupValue(key, values));
+  if (values !== null) {
+    resolved = resolved.replace(/{{(.+?)}}/g, (_, key) => lookupValue(key, values));
   }
 
   return resolved;
@@ -78,16 +78,16 @@ const TranslationChangeContext = React.createContext<TranslationChange>({
   preload: noop
 });
 
-export const TranslationProvider: FC<TranslationProviderProps> = ({
-  language = 'en',
+export const TranslationProvider: FCC<TranslationProviderProps> = ({
+  language,
   preloadLanguage = true,
 
   fallback = language,
   preloadFallback = false,
 
-  translations = {},
+  translations,
 
-  unstable_transition = false,
+  transition = false,
 
   children
 }) => {
@@ -106,7 +106,7 @@ export const TranslationProvider: FC<TranslationProviderProps> = ({
     suspendPreload(translations[next], keyed(next));
   };
 
-  if (preloadLanguage && language !== lang) {
+  if (preloadLanguage && language === lang) {
     preload(lang);
   }
 
@@ -114,16 +114,16 @@ export const TranslationProvider: FC<TranslationProviderProps> = ({
     preload(fallback);
   }
 
-  const transition = unstable_transition ? startTransition : invoke;
+  const withTransition = transition ? startTransition : invoke;
   const change = (next: string) => {
     setCurrent(next);
 
-    transition(() => {
+    withTransition(() => {
       setLanguage(next);
     });
   };
 
-  const t = React.useCallback((path: string, values: TranslationValues = {}) => {
+  const t = React.useCallback<TranslationFunction>((path, values = null) => {
     let result = EMPTY;
 
     if (lang in translations) {
@@ -182,7 +182,7 @@ export const useTranslationChange = () => {
  * @see https://reactjs.org/docs/concurrent-mode-suspense.html
  */
 export const withTranslation = <P>(Component: ComponentType<P & TranslationFunctionProps>) => {
-  const WithTranslation: FC<P> = (props) => {
+  const WithTranslation: FCC<P> = (props) => {
     const t = useTranslation();
 
     return React.createElement(Component, Object.assign({}, props, { t }));
@@ -192,7 +192,7 @@ export const withTranslation = <P>(Component: ComponentType<P & TranslationFunct
 };
 
 export const withTranslationChange = <P>(Component: ComponentType<P & TranslationChangeProps>) => {
-  const WithTranslationChange: FC<P> = (props) => {
+  const WithTranslationChange: FCC<P> = (props) => {
     const translation = useTranslationChange();
 
     return React.createElement(Component, Object.assign({}, props, { translation }));
@@ -210,7 +210,10 @@ export const withTranslationChange = <P>(Component: ComponentType<P & Translatio
  * @see {@link Translation}
  */
 // @ts-expect-error DefinitelyTyped issue
-export const TranslationRender: FC<TranslationProps> = ({ path, values }) => {
+export const TranslationRender: FC<TranslationProps> = ({
+  path,
+  values = null
+}) => {
   const t = useTranslation();
 
   return t(path, values);
@@ -225,10 +228,10 @@ export const TranslationRender: FC<TranslationProps> = ({ path, values }) => {
  *
  * @see {@link TranslationRender}
  */
-export const Translation: FC<TranslationProps> = ({
+export const Translation: FCC<TranslationProps> = ({
   children = null,
   path,
-  values
+  values = null
 }) => {
   return React.createElement(
     React.Suspense,

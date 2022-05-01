@@ -1,4 +1,4 @@
-# i18nano [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/eolme/next-sw/blob/master/LICENSE) [![BundlePhobia](https://img.shields.io/bundlephobia/minzip/i18nano)](https://bundlephobia.com/package/i18nano) [![BundlePhobia](https://img.shields.io/bundlephobia/min/i18nano)](https://bundlephobia.com/package/i18nano)
+# i18nano [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/eolme/i18nano/blob/master/LICENSE) [![BundlePhobia](https://img.shields.io/bundlephobia/minzip/i18nano)](https://bundlephobia.com/package/i18nano) [![BundlePhobia](https://img.shields.io/bundlephobia/min/i18nano)](https://bundlephobia.com/package/i18nano) [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/eolme/i18nano/blob/master/tests)
 
 > Internationalization for the react is done simply.
 
@@ -84,7 +84,7 @@ export const LanguageChange = () => {
 
 ## Concurrent features
 
-If you use react 18 it is recommended to use `unstable_transition`.
+If you use react 18 it is recommended to use `transition`.
 Then when you switch languages, the last downloaded translation will be displayed instead of the loader.
 
 ## Split
