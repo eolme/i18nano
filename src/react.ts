@@ -9,7 +9,7 @@ import type {
   TranslationValues
 } from './types.js';
 
-import React from 'react';
+import * as React from 'react';
 
 import { suspend, preload as suspendPreload } from 'suspend-react';
 

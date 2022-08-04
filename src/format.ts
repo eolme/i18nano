@@ -1,6 +1,6 @@
 import type { FCC } from './compat.js';
 
-import React from 'react';
+import * as React from 'react';
 
 import { useTranslationChange } from './react.js';
 
