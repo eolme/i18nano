@@ -1,5 +1,7 @@
 .DS_Store
 .eslintcache
 yarn.lock
+.yarnrc.yml
+.yarn
 node_modules/
 lib/
