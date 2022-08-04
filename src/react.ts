@@ -39,13 +39,11 @@ const {
   unstable_startTransition = invoke,
   startTransition = unstable_startTransition,
 
-  unstable_useOpaqueIdentifier = useInstanceId,
-  useId = unstable_useOpaqueIdentifier
+  useId = useInstanceId
 } = React as unknown as {
   unstable_startTransition: typeof invoke;
   startTransition: typeof invoke;
 
-  unstable_useOpaqueIdentifier: typeof useInstanceId;
   useId: typeof useInstanceId;
 };
 
@@ -209,7 +207,7 @@ export const withTranslationChange = <P>(Component: ComponentType<P & Translatio
  *
  * @see {@link Translation}
  */
-// @ts-expect-error DefinitelyTyped issue
+// @ts-expect-error React 17 incompatible type
 export const TranslationRender: FC<TranslationProps> = ({
   path,
   values = null
