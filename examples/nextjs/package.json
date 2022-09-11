@@ -1,0 +1,12 @@
+{
+  "name": "nextjs",
+  "private": "true",
+  "packageManager": "yarn@3.2.3",
+  "dependencies": {
+    "cookies-next": "^2.1.1",
+    "i18nano": "portal:../../",
+    "next": "^12.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
