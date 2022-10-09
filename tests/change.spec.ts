@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import renderer from 'react-test-renderer';
 
 import { waitForSuspense } from './suspense.js';
@@ -28,7 +28,7 @@ describe('change', () => {
           translations: TRANSLATIONS
         },
 
-        // @ts-expect-error DefinitelyTyped issue
+        // @ts-expect-error React 17 incompatible type
         React.createElement(() => {
           const translation = Module.useTranslationChange();
 
@@ -90,7 +90,7 @@ describe('change', () => {
           translations: TRANSLATIONS
         },
 
-        // @ts-expect-error DefinitelyTyped issue
+        // @ts-expect-error React 17 incompatible type
         React.createElement(() => {
           const translation = Module.useTranslationChange();
 

@@ -20,6 +20,7 @@ const config = {
   collectCoverage: true,
   collectCoverageFrom: [
     '**/src/react.{js,ts}',
+    '**/src/format.{js,ts}',
     '!**/node_modules/**'
   ],
   coverageProvider: 'v8',

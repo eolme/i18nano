@@ -8,5 +8,4 @@ export type FC<P = {}> = _FC<PropsWithoutChildren<P>>;
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type FCC<P = {}> = _FC<PropsWithChildren<P>>;
 
-// TODO: maybe incompatible
 export type { _ComponentType as ComponentType };

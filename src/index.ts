@@ -10,6 +10,15 @@ export {
   withTranslationChange
 } from './react.js';
 
+export {
+  FormatProvider,
+
+  useFormatDate,
+  useFormatList,
+  useFormatNumber,
+  useFormatRelative
+} from './format.js';
+
 export type {
   TranslationValues,
   TranslationChange,
