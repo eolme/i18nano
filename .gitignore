@@ -5,6 +5,7 @@ yarn.lock
 .yarn
 node_modules/
 lib/
+coverage/
 
 examples/nextjs/.next/
 examples/nextjs/node_modules/

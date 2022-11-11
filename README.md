@@ -1,4 +1,4 @@
-# i18nano [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/eolme/i18nano/blob/master/LICENSE) [![BundlePhobia](https://img.shields.io/bundlephobia/minzip/i18nano)](https://bundlephobia.com/package/i18nano) [![BundlePhobia](https://img.shields.io/bundlephobia/min/i18nano)](https://bundlephobia.com/package/i18nano) [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/eolme/i18nano/blob/master/tests)
+# i18nano [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/eolme/i18nano/blob/master/LICENSE) [![minified bundle size](https://phobia.vercel.app/api/badge/bytes/i18nano)](https://phobia.vercel.app/p/i18nano) [![gzip bundle size](https://phobia.vercel.app/api/badge/gz/i18nano)](https://phobia.vercel.app/p/i18nano) [![brotli bundle size](https://phobia.vercel.app/api/badge/br/i18nano)](https://phobia.vercel.app/p/i18nano) [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/eolme/i18nano/blob/master/tests)
 
 > Internationalization for the react is done simply.
 
@@ -9,8 +9,11 @@ Lightweight translation module with functionality similar to react-i18next.
 - Async translation loading 
 - Fallback translations
 - Preloading translations
+- Translations in translations
+- Deep translations and values lookup
 - [Mustache](https://mustache.github.io/)-like templates
-- Deep object property lookup
+- Nested providers
+- No dependencies
 - And other cool stuff
 
 ## Usage
@@ -53,11 +56,6 @@ And that's all it takes! For other available provider options see [definition](.
 - `useTranslation` - returns the function to extract the translation
 - `useTranslationChange` - returns the object with information and useful functions such as `switch` and `preload` languages
 
-### HOCs
-
-- `withTranslation` - injects the translation function
-- `withTranslationChange` - injects the information and useful functions
-
 ### Switch
 
 To switch between languages, let's create a component using the hook as follows:
@@ -95,30 +93,67 @@ You can use several TranslationProviders to split up translation files, for exam
 import { TranslationProvider, Translation } from 'i18nano';
 
 const translations = {
+  common: {
+    'en': async () => ({
+      license: 'MIT'
+    })
+  },
   header: {
-    'en': () => import('translations/header/en.json')
+    'en': async () => ({
+      title: 'Header'
+    })
   },
   main: {
-    'en': () => import('translations/main/en.json')
+    'en': async () => ({
+      title: 'Main'
+    })
   }
 };
 
 export const Header = () => {
   return (
-    <TranslationProvider translations={translations.header}>
+    <TranslationProvider
+      language="en"
+      translations={translations.header}
+    >
       <header>
         <Translation path="title" />
       </header>
+      <Translation path="license" />
     </TranslationProvider>
   );
 };
 
 export const Main = () => {
   return (
-    <TranslationProvider translations={translations.main}>
+    <TranslationProvider
+      language="en"
+      translations={translations.main}
+    >
       <h1>
         <Translation path="title" />
       </h1>
+      <Translation path="license" />
+    </TranslationProvider>
+  );
+};
+
+/**
+ * MIT
+ * <header>Header</header>
+ * MIT
+ * <main>Main</main>
+ * MIT
+ */
+export const App = () => {
+  return (
+    <TranslationProvider
+      language="en"
+      translations={translations.common}
+    >
+      <Translation path="license" />
+      <Header />
+      <Main />
     </TranslationProvider>
   );
 };
@@ -126,7 +161,7 @@ export const Main = () => {
 
 ## Installation
 
-Recommend to use [yarn](https://classic.yarnpkg.com/en/docs/install/) for dependency management:
+Recommend to use [yarn](https://yarnpkg.com/getting-started/install) for dependency management:
 
 ```shell
 yarn add i18nano

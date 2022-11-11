@@ -1,10 +1,12 @@
-import React from 'react';
-import renderer from 'react-test-renderer';
+import { describe, expect, it } from 'vitest';
+
+import * as React from 'react';
+import * as renderer from 'react-test-renderer';
 
 import { waitForSuspense } from './suspense.js';
 
 import {
-  DEFAULT_PROPS,
+  createTranslations,
   Module,
   NOOP,
   VALUES
@@ -17,13 +19,23 @@ describe('templates', () => {
     const component = renderer.create(
       React.createElement(
         Module.TranslationProvider,
-        DEFAULT_PROPS,
+        {
+          language: 'ru',
+          translations: createTranslations()
+        },
         React.createElement(
-          Module.Translation,
+          Module.TranslationProvider,
           {
-            path: 'template',
-            values: VALUES
-          }
+            language: 'it',
+            translations: createTranslations()
+          },
+          React.createElement(
+            Module.Translation,
+            {
+              path: 'template',
+              values: VALUES
+            }
+          )
         )
       )
     );
@@ -31,6 +43,6 @@ describe('templates', () => {
     await renderer.act(NOOP);
     await waitForSuspense(NOOP);
 
-    expect(component.toJSON()).toBe('0 1 2 3');
+    expect(component.toJSON()).toBe(`0 1 2 3 ru it`);
   });
 });

@@ -1,10 +1,12 @@
-import React from 'react';
-import renderer from 'react-test-renderer';
+import { describe, it, expect } from 'vitest';
+
+import * as React from 'react';
+import * as renderer from 'react-test-renderer';
 
 import { waitForSuspense } from './suspense.js';
 
 import {
-  DEFAULT_PROPS,
+  createDefaultProps,
   Module,
   NOOP,
   SUSPENSE
@@ -14,10 +16,12 @@ describe('components', () => {
   it('component TranslationRender', async () => {
     expect.assertions(2);
 
+    const props = createDefaultProps();
+
     const component = renderer.create(
       React.createElement(
         Module.TranslationProvider,
-        DEFAULT_PROPS,
+        props,
         React.createElement(
           React.Suspense,
           {
@@ -26,7 +30,7 @@ describe('components', () => {
           React.createElement(
             Module.TranslationRender,
             {
-              path: DEFAULT_PROPS.language
+              path: props.language
             }
           )
         )
@@ -38,20 +42,22 @@ describe('components', () => {
     await renderer.act(NOOP);
     await waitForSuspense(NOOP);
 
-    expect(component.toJSON()).toBe(DEFAULT_PROPS.language);
+    expect(component.toJSON()).toBe(props.language);
   });
 
   it('component Translation', async () => {
     expect.assertions(2);
 
+    const props = createDefaultProps();
+
     const component = renderer.create(
       React.createElement(
         Module.TranslationProvider,
-        DEFAULT_PROPS,
+        props,
         React.createElement(
           Module.Translation,
           {
-            path: DEFAULT_PROPS.language
+            path: props.language
           },
           SUSPENSE
         )
@@ -63,6 +69,6 @@ describe('components', () => {
     await renderer.act(NOOP);
     await waitForSuspense(NOOP);
 
-    expect(component.toJSON()).toBe(DEFAULT_PROPS.language);
+    expect(component.toJSON()).toBe(props.language);
   });
 });

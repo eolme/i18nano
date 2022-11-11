@@ -20,8 +20,8 @@ const Home: NextPage<HomeProps> = ({ lang }) => {
     >
       <Lang />
       <h1><Translation path="title" /></h1>
-      <Link href="/readme" passHref={true}>
-        <a><Translation path="readme" /></a>
+      <Link href="/readme">
+        <Translation path="readme" />
       </Link>
     </TranslationProvider>
   );

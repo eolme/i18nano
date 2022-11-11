@@ -1,10 +1,6 @@
 /**
  * @type {import('next').NextConfig}
  */
-const config = {
-  experimental: {
-    runtime: 'nodejs'
-  }
-};
+const config = {};
 
 module.exports = config;

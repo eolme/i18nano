@@ -1,15 +1,15 @@
-export const TRANSLATIONS = {
+export const createTranslations = () => ({
   ru: async () => ({
     ru: 'ru',
-    template: '{{value}} {{nested.value}} {{array.0}} {{array.1.value}}'
+    template: '{{value}} {{nested.value}} {{array.0}} {{array.1.value}} {{ru}} {{it}}'
   }),
   it: async () => ({
     it: 'it',
-    template: '{{value}} {{nested.value}} {{array.0}} {{array.1.value}}'
+    template: '{{value}} {{nested.value}} {{array.0}} {{array.1.value}} {{ru}} {{it}}'
   })
-};
+});
 
-export const TRANSLATIONS_KEYS = Object.keys(TRANSLATIONS);
+export const TRANSLATIONS_KEYS = Object.keys(createTranslations());
 
 export const VALUES = {
   value: '0',
@@ -22,10 +22,12 @@ export const VALUES = {
   ]
 };
 
-export const DEFAULT_PROPS = {
+export const createDefaultProps = () => ({
   language: TRANSLATIONS_KEYS[0],
-  translations: TRANSLATIONS
-};
+  preloadLanguage: false,
+  preloadFallback: false,
+  translations: createTranslations()
+});
 
 export const SUSPENSE = 'suspense';
 
@@ -33,4 +35,5 @@ export const NOOP = () => {
   // Noop
 };
 
-export * as Module from '../src';
+export * as Module from '../src/index.js';
+export * as Lookup from '../src/lookup.js';

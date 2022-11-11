@@ -3,18 +3,16 @@ export {
   TranslationRender,
   TranslationProvider,
 
-  useTranslation,
-  withTranslation,
+  TranslationContext,
+  TranslationChangeContext,
 
-  useTranslationChange,
-  withTranslationChange
-} from './react.js';
+  useTranslation,
+  useTranslationChange
+} from './implementation.js';
 
 export type {
   TranslationValues,
   TranslationChange,
-  TranslationChangeProps,
   TranslationFunction,
-  TranslationFunctionProps,
   TranslationProps
 } from './types.js';
