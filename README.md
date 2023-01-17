@@ -1,4 +1,4 @@
-# i18nano [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/eolme/i18nano/blob/master/LICENSE) [![minified bundle size](https://phobia.vercel.app/api/badge/bytes/i18nano)](https://phobia.vercel.app/p/i18nano) [![gzip bundle size](https://phobia.vercel.app/api/badge/gz/i18nano)](https://phobia.vercel.app/p/i18nano) [![brotli bundle size](https://phobia.vercel.app/api/badge/br/i18nano)](https://phobia.vercel.app/p/i18nano) [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/eolme/i18nano/blob/master/tests)
+# i18nano [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/eolme/i18nano/blob/master/LICENSE) [![gzip bundle size](https://phobia.vercel.app/api/badge/gz/i18nano)](https://phobia.vercel.app/p/i18nano) [![brotli bundle size](https://phobia.vercel.app/api/badge/br/i18nano)](https://phobia.vercel.app/p/i18nano) [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/eolme/i18nano/blob/master/tests)
 
 > Internationalization for the react is done simply.
 
