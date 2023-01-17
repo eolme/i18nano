@@ -1,10 +1,15 @@
 .DS_Store
 tsconfig.json
+vite.config.ts
+vitest.config.ts
 .editorconfig
 .eslintcache
 .eslintignore
 .eslintrc
+.yarn/
+coverage/
 yarn.lock
 node_modules/
 src/
-example/
+tests/
+examples/
