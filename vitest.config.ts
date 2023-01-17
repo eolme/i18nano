@@ -10,7 +10,14 @@ export default defineConfig({
     coverage: {
       enabled: true,
       provider: 'c8',
-      reporter: 'text'
+      reporter: 'text',
+      exclude: [
+        // Exclude tests and test utils
+        '**/tests/**/*',
+
+        // Too complex polyfills for coverage
+        '**/src/react.ts'
+      ]
     }
   }
 });

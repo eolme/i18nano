@@ -4,6 +4,6 @@
   "dependencies": {
     "cookies-next": "^2.1.1",
     "i18nano": "portal:../../",
-    "next": "^13.0.2"
+    "next": "^13.1.2"
   }
 }

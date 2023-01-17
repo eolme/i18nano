@@ -9,12 +9,6 @@ import { plain } from './utils.js';
  * @returns string from values if found otherwise empty string
  */
 export const lookup = (path: string | number, values: TranslationValues): string => {
-  // Keys have too complex types
-
-  if (plain(values)) {
-    return EMPTY;
-  }
-
   let key = String(path);
 
   if (key in values) {
@@ -24,6 +18,10 @@ export const lookup = (path: string | number, values: TranslationValues): string
       return inner;
     }
 
+    return EMPTY;
+  }
+
+  if (plain(values)) {
     return EMPTY;
   }
 

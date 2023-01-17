@@ -11,8 +11,11 @@ export {
 } from './implementation.js';
 
 export type {
-  TranslationValues,
   TranslationChange,
   TranslationFunction,
-  TranslationProps
+  TranslationLoader,
+  TranslationPromise,
+  TranslationProps,
+  TranslationProviderProps,
+  TranslationValues
 } from './types.js';

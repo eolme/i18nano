@@ -7,10 +7,7 @@ import type {
   TranslationValues
 } from './types.js';
 
-import {
-  React,
-  use
-} from './react.js';
+import { React, useContext } from './react.js';
 
 import { EMPTY, PLAIN } from './const.js';
 import { invoke, noop, notranslate } from './utils.js';
@@ -38,8 +35,8 @@ export const TranslationProvider: FCC<TranslationProviderProps> = ({
 
   children
 }) => {
-  const parentTranslate = use(TranslationContext);
-  const parentTranslateChange = use(TranslationChangeContext);
+  const parentTranslate = useContext(TranslationContext);
+  const parentTranslateChange = useContext(TranslationChangeContext);
 
   /**
    * Two states are needed depending on usage:
@@ -52,7 +49,9 @@ export const TranslationProvider: FCC<TranslationProviderProps> = ({
   const withTransition = transition ? React.startTransition : invoke;
 
   const preload = (next: string) => {
-    cached(translations[next]);
+    if (next in translations) {
+      cached(translations[next]);
+    }
   };
 
   const preloadRecursive = (next: string) => {
@@ -69,11 +68,13 @@ export const TranslationProvider: FCC<TranslationProviderProps> = ({
   }
 
   const change = (next: string) => {
-    setCurrent(next);
+    if (next in translations) {
+      setCurrent(next);
 
-    withTransition(() => {
-      setLanguage(next);
-    });
+      withTransition(() => {
+        setLanguage(next);
+      });
+    }
   };
 
   const changeRecursive = (next: string) => {
@@ -150,9 +151,9 @@ export const TranslationProvider: FCC<TranslationProviderProps> = ({
  *
  * @see https://reactjs.org/docs/concurrent-mode-suspense.html
  */
-export const useTranslation = () => use(TranslationContext);
+export const useTranslation = () => useContext(TranslationContext);
 
-export const useTranslationChange = () => use(TranslationChangeContext);
+export const useTranslationChange = () => useContext(TranslationChangeContext);
 
 /**
  * Use only if you want to wrap your own Suspense

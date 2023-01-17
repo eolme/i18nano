@@ -2,7 +2,9 @@ export type TranslationValues = {
   [key: string | number]: string | TranslationValues;
 } | Array<string | TranslationValues>;
 
-export type TranslationLoader = () => Promise<TranslationValues>;
+export type TranslationPromise = PromiseLike<TranslationValues>;
+
+export type TranslationLoader = () => TranslationPromise;
 
 export type TranslationFunction = (path: string, values?: TranslationValues | undefined) => string;
 

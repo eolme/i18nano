@@ -1,14 +1,16 @@
-import type { TranslationLoader, TranslationValues } from './types.js';
+import type { TranslationLoader, TranslationPromise } from './types.js';
 
 import { use } from './react.js';
 
-// TODO: use react cache
-const cache = new Map<TranslationLoader, Promise<TranslationValues>>();
+const cache = new Map<TranslationLoader, TranslationPromise>();
 
 export const cached = (fn: TranslationLoader) => {
-  const promise = cache.get(fn) || fn();
+  let promise = cache.get(fn);
 
-  cache.set(fn, promise);
+  if (typeof promise === 'undefined') {
+    promise = fn();
+    cache.set(fn, promise);
+  }
 
   return promise;
 };

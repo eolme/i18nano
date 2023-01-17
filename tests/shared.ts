@@ -35,5 +35,8 @@ export const NOOP = () => {
   // Noop
 };
 
+// eslint-disable-next-line no-restricted-syntax
 export * as Module from '../src/index.js';
+
+// eslint-disable-next-line no-restricted-syntax
 export * as Lookup from '../src/lookup.js';
