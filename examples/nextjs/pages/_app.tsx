@@ -1,30 +1,26 @@
-import type { NextPage } from 'next';
-import type { AppProps } from 'next/app';
+import type { FC } from 'react';
+import type { AppProps, AppContext, AppInitialProps } from 'next/app';
 
 import { getCookie } from 'cookies-next';
 
 import { DEFAULT_LANGUAGE } from '../i18n';
 
-type LangProps = {
-  lang: string;
-};
+type NextApp = FC<AppProps> & {
+  getInitialProps: (app: AppContext) => Promise<AppInitialProps>;
+}
 
-type LangInitialProps = {
-  pageProps: LangProps;
-};
-
-const App: NextPage<AppProps<LangProps>, LangInitialProps> = ({ Component, pageProps }) => {
+const App: NextApp = ({ Component, pageProps }) => {
   return (
     <Component {...pageProps} />
   );
 };
 
-App.getInitialProps = async (ctx) => {
+App.getInitialProps = async (app) => {
   return {
     pageProps: {
       lang: getCookie('lang', {
-        req: ctx.req,
-        res: ctx.res
+        req: app.ctx.req,
+        res: app.ctx.res
       }) as string || DEFAULT_LANGUAGE
     }
   };
