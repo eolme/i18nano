@@ -2,11 +2,11 @@ export type TranslationValues = {
   [key: string | number]: string | TranslationValues;
 } | Array<string | TranslationValues>;
 
-export type TranslationFunction = (path: string, values?: TranslationValues | null | undefined) => string;
+export type TranslationPromise = PromiseLike<TranslationValues>;
 
-export type TranslationFunctionProps = {
-  t: TranslationFunction;
-};
+export type TranslationLoader = () => TranslationPromise;
+
+export type TranslationFunction = (path: string, values?: TranslationValues | undefined) => string;
 
 export type TranslationChange = Readonly<{
   all: string[];
@@ -15,13 +15,9 @@ export type TranslationChange = Readonly<{
   preload: (next: string) => void;
 }>;
 
-export type TranslationChangeProps = {
-  translation: TranslationChange;
-};
-
 export type TranslationProps = {
   path: string;
-  values?: TranslationValues | null | undefined;
+  values?: TranslationValues | undefined;
 };
 
 export type TranslationProviderProps = {
@@ -31,7 +27,7 @@ export type TranslationProviderProps = {
   fallback?: string;
   preloadFallback?: boolean;
 
-  translations: Record<string, () => Promise<TranslationValues>>;
+  translations: Record<string, TranslationLoader>;
 
   transition?: boolean;
 };

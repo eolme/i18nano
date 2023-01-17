@@ -1,16 +1,16 @@
+import { describe, it, expect, vi } from 'vitest';
+
 import React from 'react';
 import renderer from 'react-test-renderer';
-
-import { fn } from 'jest-mock';
 
 import { waitForSuspense } from './suspense.js';
 
 import {
-  DEFAULT_PROPS,
+  createDefaultProps,
+  createTranslations,
   Module,
   NOOP,
   SUSPENSE,
-  TRANSLATIONS,
   TRANSLATIONS_KEYS
 } from './shared.js';
 
@@ -18,10 +18,12 @@ describe('provider', () => {
   it('renders correctly', () => {
     expect.assertions(1);
 
+    const props = createDefaultProps();
+
     const component = renderer.create(
       React.createElement(
         Module.TranslationProvider,
-        DEFAULT_PROPS,
+        props,
         React.createElement('div', {
           'data-children': true
         })
@@ -53,7 +55,7 @@ describe('provider', () => {
           preloadLanguage: false,
           fallback: TRANSLATIONS_KEYS[1],
           preloadFallback: false,
-          translations: TRANSLATIONS
+          translations: createTranslations()
         },
         React.createElement(
           Module.Translation,
@@ -82,8 +84,8 @@ describe('provider', () => {
     expect.assertions(2);
 
     const translations = {
-      language: fn(async () => ({})),
-      fallback: fn(async () => ({}))
+      language: vi.fn(async () => ({})),
+      fallback: vi.fn(async () => ({}))
     };
 
     renderer.create(
@@ -104,5 +106,56 @@ describe('provider', () => {
 
     expect(translations.language).toHaveBeenCalledTimes(lc);
     expect(translations.fallback).toHaveBeenCalledTimes(fc);
+  });
+
+  it.each([
+    ['preloadLanguage', false, 0, 0],
+    ['preloadLanguage', true, 1, 0],
+    ['preloadFallback', false, 0, 0],
+    ['preloadFallback', true, 0, 1]
+  ])('handles nested prop "%s" correctly', async (prop, value, lc, fc) => {
+    expect.assertions(4);
+
+    const translations = {
+      language: vi.fn(async () => ({})),
+      fallback: vi.fn(async () => ({}))
+    };
+
+    const translationsNested = {
+      language: vi.fn(async () => ({})),
+      fallback: vi.fn(async () => ({}))
+    };
+
+    renderer.create(
+      React.createElement(
+        Module.TranslationProvider,
+        {
+          language: 'language',
+          preloadLanguage: false,
+          fallback: 'fallback',
+          preloadFallback: false,
+          translations
+        },
+        React.createElement(
+          Module.TranslationProvider,
+          {
+            language: 'language',
+            preloadLanguage: false,
+            fallback: 'fallback',
+            preloadFallback: false,
+            translations: translationsNested,
+            [prop]: value
+          }
+        )
+      )
+    );
+
+    await renderer.act(NOOP);
+
+    expect(translations.language).toHaveBeenCalledTimes(0);
+    expect(translations.fallback).toHaveBeenCalledTimes(0);
+
+    expect(translationsNested.language).toHaveBeenCalledTimes(lc);
+    expect(translationsNested.fallback).toHaveBeenCalledTimes(fc);
   });
 });

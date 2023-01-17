@@ -1,5 +1,7 @@
-import React from 'react';
-import renderer from 'react-test-renderer';
+import { describe, it, expect } from 'vitest';
+
+import * as React from 'react';
+import * as renderer from 'react-test-renderer';
 
 import { waitForSuspense } from './suspense.js';
 
@@ -7,7 +9,7 @@ import {
   Module,
   NOOP,
   SUSPENSE,
-  TRANSLATIONS,
+  createTranslations,
   TRANSLATIONS_KEYS
 } from './shared.js';
 
@@ -25,7 +27,7 @@ describe('change', () => {
         Module.TranslationProvider,
         {
           language: from,
-          translations: TRANSLATIONS
+          translations: createTranslations()
         },
 
         // @ts-expect-error DefinitelyTyped issue
@@ -87,7 +89,7 @@ describe('change', () => {
 
           // Prevent fallback
           fallback: 'fallback',
-          translations: TRANSLATIONS
+          translations: createTranslations()
         },
 
         // @ts-expect-error DefinitelyTyped issue

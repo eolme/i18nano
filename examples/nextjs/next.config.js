@@ -1,10 +1,13 @@
 /**
  * @type {import('next').NextConfig}
  */
-const config = {
-  experimental: {
-    runtime: 'nodejs'
+const next = {
+  webpack(config) {
+    // yarn portal
+    config.resolve.alias.i18nano = require.resolve('../../');
+
+    return config;
   }
 };
 
-module.exports = config;
+module.exports = next;

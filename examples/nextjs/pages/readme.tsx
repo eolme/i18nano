@@ -20,8 +20,8 @@ const Readme: NextPage<ReadmeProps> = ({ lang }) => {
     >
       <Lang />
       <h1><Translation path="title" /></h1>
-      <Link href="/" passHref={true} shallow={false}>
-        <a><Translation path="home" /></a>
+      <Link href="/">
+        <Translation path="home" />
       </Link>
     </TranslationProvider>
   );

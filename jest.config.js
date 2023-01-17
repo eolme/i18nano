@@ -1,5 +1,6 @@
 /** @type {import('@jest/types').Config.InitialOptions} */
 const config = {
+  verbose: true,
   moduleFileExtensions: ['js', 'ts'],
   extensionsToTreatAsEsm: ['.ts'],
   transform: {

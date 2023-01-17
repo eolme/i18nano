@@ -7,30 +7,5 @@
   },
   "rules": {
     "@typescript-eslint/promise-function-async": 0
-  },
-  "overrides": [
-    {
-      "files": [
-        "**/tests/*.ts"
-      ],
-      "env": {
-        "jest": true,
-        "jest/globals": true
-      },
-      "plugins": [
-        "jest",
-        "jest-formatting"
-      ],
-      "settings": {
-        "jest": {
-          "version": 27
-        }
-      },
-      "extends": [
-        "@mntm",
-        "plugin:jest/all",
-        "plugin:jest-formatting/strict"
-      ]
-    }
-  ]
+  }
 }

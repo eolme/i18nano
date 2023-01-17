@@ -17,13 +17,19 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "next-env.d.ts",
     "components/",
     "i18n/",
-    "pages/"
+    "pages/",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
