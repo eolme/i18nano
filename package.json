@@ -1,6 +1,6 @@
 {
   "name": "i18nano",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",
   "types": "./lib/index.d.ts",
@@ -42,26 +42,27 @@
     "examples/*"
   ],
   "devDependencies": {
-    "@jest/types": "^29.3.1",
-    "@mntm/eslint-config": "^1.3.1",
-    "@types/node": "^18.11.18",
-    "@types/react": "^18.0.26",
+    "@jest/types": "^29.5.0",
+    "@mntm/eslint-config": "^1.4.0",
+    "@types/node": "^18.15.7",
+    "@types/react": "^18.0.29",
     "@types/react-test-renderer": "^18.0.0",
-    "@vitest/coverage-c8": "^0.27.2",
-    "esbuild": "^0.17.2",
-    "eslint": "^8.32.0",
+    "@vitest/coverage-c8": "^0.29.7",
+    "esbuild": "^0.17.12",
+    "eslint": "^8.36.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-reconciler": "0.29.0",
     "react-test-renderer": "18.2.0",
     "scheduler": "0.23.0",
-    "typescript": "^4.9.4",
-    "vite": "^4.0.4",
-    "vite-plugin-dts": "^1.7.1",
-    "vitest": "^0.27.2"
+    "typescript": "^5.0.2",
+    "vite": "^4.2.1",
+    "vite-plugin-dts": "^2.1.0",
+    "vitest": "^0.29.7"
   },
   "resolutions": {
-    "esbuild": "^0.17.2"
+    "esbuild": "^0.17.12",
+    "vite": "^4.2.1"
   },
   "peerDependencies": {
     "react": "^18.2.0"
