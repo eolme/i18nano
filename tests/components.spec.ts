@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import * as React from 'react';
 import * as renderer from 'react-test-renderer';
@@ -6,10 +6,10 @@ import * as renderer from 'react-test-renderer';
 import { waitForSuspense } from './suspense.js';
 
 import {
-  createDefaultProps,
   Module,
   NOOP,
-  SUSPENSE
+  SUSPENSE,
+  createDefaultProps
 } from './shared.js';
 
 describe('components', () => {

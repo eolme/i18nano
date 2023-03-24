@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import React from 'react';
 import renderer from 'react-test-renderer';
@@ -6,12 +6,12 @@ import renderer from 'react-test-renderer';
 import { waitForSuspense } from './suspense.js';
 
 import {
-  createDefaultProps,
-  createTranslations,
   Module,
   NOOP,
   SUSPENSE,
-  TRANSLATIONS_KEYS
+  TRANSLATIONS_KEYS,
+  createDefaultProps,
+  createTranslations
 } from './shared.js';
 
 describe('provider', () => {
@@ -157,5 +157,52 @@ describe('provider', () => {
 
     expect(translationsNested.language).toHaveBeenCalledTimes(lc);
     expect(translationsNested.fallback).toHaveBeenCalledTimes(fc);
+  });
+
+  it('inherits parent language correctly', async () => {
+    expect.assertions(4);
+
+    const translations = {
+      parent: vi.fn(async () => ({
+        test: 'parent'
+      })),
+      children: vi.fn(async () => ({
+        test: 'children'
+      }))
+    };
+
+    const component = renderer.create(
+      React.createElement(
+        Module.TranslationProvider,
+        {
+          language: 'parent',
+          translations
+        },
+        React.createElement(
+          Module.TranslationProvider,
+          {
+            language: 'children',
+            translations
+          },
+          React.createElement(
+            Module.Translation,
+            {
+              path: 'test'
+            },
+            SUSPENSE
+          )
+        )
+      )
+    );
+
+    expect(component.toJSON()).toBe(SUSPENSE);
+
+    await renderer.act(NOOP);
+    await waitForSuspense(NOOP);
+
+    expect(component.toJSON()).toBe('parent');
+
+    expect(translations.parent).toHaveBeenCalledTimes(1);
+    expect(translations.children).toHaveBeenCalledTimes(0);
   });
 });

@@ -6,10 +6,10 @@ import * as renderer from 'react-test-renderer';
 import { waitForSuspense } from './suspense.js';
 
 import {
-  createTranslations,
   Module,
   NOOP,
-  VALUES
+  VALUES,
+  createTranslations
 } from './shared.js';
 
 describe('templates', () => {
@@ -43,6 +43,6 @@ describe('templates', () => {
     await renderer.act(NOOP);
     await waitForSuspense(NOOP);
 
-    expect(component.toJSON()).toBe(`0 1 2 3 ru it`);
+    expect(component.toJSON()).toBe(`0 1 2 3 ru `);
   });
 });
