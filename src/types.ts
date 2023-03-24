@@ -21,7 +21,7 @@ export type TranslationProps = {
 };
 
 export type TranslationProviderProps = {
-  language: string;
+  language?: string;
   preloadLanguage?: boolean;
 
   fallback?: string;

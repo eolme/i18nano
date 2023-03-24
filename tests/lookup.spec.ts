@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { Lookup } from './shared';
 
@@ -11,7 +11,7 @@ describe('lookup', () => {
   it('object with non-string value', () => {
     expect.assertions(1);
     expect(Lookup.lookup('number', { number: 1 } as any)).toBe('');
-  })
+  });
 
   it.each([
     ['a', { a: '1' }, '1'],

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import * as React from 'react';
 import * as renderer from 'react-test-renderer';
@@ -9,8 +9,9 @@ import {
   Module,
   NOOP,
   SUSPENSE,
-  createTranslations,
-  TRANSLATIONS_KEYS
+  TRANSLATIONS_KEYS,
+  createDefaultProps,
+  createTranslations
 } from './shared.js';
 
 describe('change', () => {
@@ -120,5 +121,85 @@ describe('change', () => {
     await waitForSuspense(NOOP);
 
     expect(component.toJSON()).toStrictEqual(cases[3]);
+  });
+
+  it('changes side providers correctly', async () => {
+    expect.assertions(4);
+
+    let changeParent: (lang: string) => void;
+    let changeLeft: (lang: string) => void;
+    let changeRight: (lang: string) => void;
+
+    const component = renderer.create(
+      React.createElement(
+        Module.TranslationProvider,
+        createDefaultProps(),
+
+        // @ts-expect-error DefinitelyTyped issue
+        React.createElement(() => {
+          const translation = Module.useTranslationChange();
+
+          changeParent = translation.change;
+
+          return translation.lang;
+        }),
+        React.createElement(
+          Module.TranslationProvider,
+          createDefaultProps(),
+
+          // @ts-expect-error DefinitelyTyped issue
+          React.createElement(() => {
+            const translation = Module.useTranslationChange();
+
+            changeLeft = translation.change;
+
+            return translation.lang;
+          })
+        ),
+        React.createElement(
+          Module.TranslationProvider,
+          createDefaultProps(),
+
+          // @ts-expect-error DefinitelyTyped issue
+          React.createElement(() => {
+            const translation = Module.useTranslationChange();
+
+            changeRight = translation.change;
+
+            return translation.lang;
+          })
+        )
+      )
+    );
+
+    expect(component.toJSON()).toStrictEqual([
+      TRANSLATIONS_KEYS[0],
+      TRANSLATIONS_KEYS[0],
+      TRANSLATIONS_KEYS[0]
+    ]);
+
+    await renderer.act(() => changeLeft(TRANSLATIONS_KEYS[1]));
+
+    expect(component.toJSON()).toStrictEqual([
+      TRANSLATIONS_KEYS[1],
+      TRANSLATIONS_KEYS[1],
+      TRANSLATIONS_KEYS[1]
+    ]);
+
+    await renderer.act(() => changeRight(TRANSLATIONS_KEYS[0]));
+
+    expect(component.toJSON()).toStrictEqual([
+      TRANSLATIONS_KEYS[0],
+      TRANSLATIONS_KEYS[0],
+      TRANSLATIONS_KEYS[0]
+    ]);
+
+    await renderer.act(() => changeParent(TRANSLATIONS_KEYS[1]));
+
+    expect(component.toJSON()).toStrictEqual([
+      TRANSLATIONS_KEYS[1],
+      TRANSLATIONS_KEYS[1],
+      TRANSLATIONS_KEYS[1]
+    ]);
   });
 });

@@ -30,12 +30,12 @@ export const use = ReactNextPromise || ((promise) => {
     return promise.value;
   }
 
-  if (promise.status === STATUS_PENDING) {
-    throw promise;
-  }
-
   if (promise.status === STATUS_REJECTED) {
     throw promise.reason;
+  }
+
+  if (promise.status === STATUS_PENDING) {
+    throw promise;
   }
 
   promise.status = STATUS_PENDING;
