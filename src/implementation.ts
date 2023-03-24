@@ -23,7 +23,7 @@ export const TranslationChangeContext = React.createContext<TranslationChange>({
 });
 
 export const TranslationProvider: FCC<TranslationProviderProps> = ({
-  language,
+  language = EMPTY,
   preloadLanguage = true,
 
   fallback = language,
@@ -38,13 +38,18 @@ export const TranslationProvider: FCC<TranslationProviderProps> = ({
   const parentTranslate = useContext(TranslationContext);
   const parentTranslateChange = useContext(TranslationChangeContext);
 
+  const parentLanguage = parentTranslateChange.lang;
+  const hasParentLanguage = parentLanguage.length > 0;
+
+  const initialLanguage = hasParentLanguage ? parentLanguage : language;
+
   /**
    * Two states are needed depending on usage:
    * - `lang` for transition feature
    * - `current` for immediate update
    */
-  const [lang, setLanguage] = React.useState(language);
-  const [current, setCurrent] = React.useState(language);
+  const [lang, setLanguage] = React.useState(initialLanguage);
+  const [current, setCurrent] = React.useState(initialLanguage);
 
   const withTransition = transition ? React.startTransition : invoke;
 
@@ -59,11 +64,11 @@ export const TranslationProvider: FCC<TranslationProviderProps> = ({
     parentTranslateChange.preload(next);
   };
 
-  if (preloadLanguage && language === lang) {
-    preload(lang);
+  if (preloadLanguage) {
+    preload(current);
   }
 
-  if (preloadFallback && language !== fallback) {
+  if (preloadFallback) {
     preload(fallback);
   }
 
@@ -81,6 +86,10 @@ export const TranslationProvider: FCC<TranslationProviderProps> = ({
     change(next);
     parentTranslateChange.change(next);
   };
+
+  if (hasParentLanguage && current !== parentLanguage) {
+    change(parentLanguage);
+  }
 
   const interpolate = (path: string, values: TranslationValues, source: TranslationValues) => {
     const template = lookup(path, source);
