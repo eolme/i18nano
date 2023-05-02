@@ -13,7 +13,7 @@ type ReactUsePromise<T> = PromiseLike<T> & {
   reason?: unknown;
 };
 
-const ReactNextUse = (React as any)[String('use')];
+const ReactNextUse = (React as any)['use'.toString()];
 const ReactNextPromise = ReactNextUse as <T>(promise: ReactUsePromise<T>) => T;
 const ReactNextContext = ReactNextUse as <T>(context: React.Context<T>) => T;
 
