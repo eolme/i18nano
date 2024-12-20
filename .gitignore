@@ -2,7 +2,9 @@
 .eslintcache
 yarn.lock
 .yarnrc.yml
-.yarn
+.yarn/
+.npmrc
+pnpm-lock.yaml
 node_modules/
 lib/
 coverage/

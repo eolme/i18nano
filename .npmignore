@@ -6,6 +6,8 @@ vitest.config.ts
 .eslintcache
 .eslintignore
 .eslintrc
+.npmrc
+pnpm-lock.yaml
 .yarn/
 coverage/
 yarn.lock

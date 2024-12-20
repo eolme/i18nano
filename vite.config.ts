@@ -6,6 +6,7 @@ import { default as dts } from 'vite-plugin-dts';
 export default defineConfig({
   plugins: [
     dts({
+      exclude: ['tests', 'vite.config.ts', 'vitest.config.ts'],
       beforeWriteFile(filePath, content) {
         promises.mkdir(dirname(filePath), { recursive: true }).then(() => {
           promises.writeFile(
@@ -38,7 +39,10 @@ export default defineConfig({
       'es6'
     ],
     rollupOptions: {
-      external: ['react']
+      external: ['react'],
+      output: {
+        banner: (chunk) => chunk.fileName === 'index.mjs' ? '"use client";\n' : ''
+      }
     }
   },
   esbuild: {

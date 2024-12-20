@@ -9,15 +9,26 @@ export default defineConfig({
     environment: 'node',
     coverage: {
       enabled: true,
-      provider: 'c8',
       reporter: 'text',
       exclude: [
         // Exclude tests and test utils
         '**/tests/**/*',
 
         // Too complex polyfills for coverage
-        '**/src/react.ts'
+        '**/src/react.ts',
+
+        '**/vite.config.ts',
+        '**/vitest.config.ts',
+
+        '**/examples/**/*',
+
+        '**/lib/**/*'
       ]
+    }
+  },
+  resolve: {
+    alias: {
+      react: 'react'
     }
   }
 });
